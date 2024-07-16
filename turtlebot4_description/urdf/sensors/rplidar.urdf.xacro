@@ -33,14 +33,50 @@
     </collision>
     <xacro:inertial_cuboid mass="0.17" x="${length_x}" y="${length_y}" z="${length_z}"/>
   </link>
-
+  
   <gazebo reference="${name}_link">
-    <xacro:ray_sensor sensor_name="${name}" gazebo="${gazebo}" 
-                  update_rate="62.0" visualize="1" 
-                  h_samples="640" h_res="1.0" h_min_angle="${-pi}" h_max_angle="${pi}" 
-                  r_min="0.164" r_max="12.0" r_res="0.01">
-                  <plugin name="dummy" filename="dummyfile"></plugin>
-    </xacro:ray_sensor>
+    <xacro:if value="${gazebo == 'ignition'}">
+      <xacro:ray_sensor sensor_name="${name}" gazebo="${gazebo}" 
+                    update_rate="62.0" visualize="1" 
+                    h_samples="640" h_res="1.0" h_min_angle="${-pi}" h_max_angle="${pi}" 
+                    r_min="0.164" r_max="12.0" r_res="0.01">
+                    <plugin name="dummy" filename="dummyfile"></plugin>
+      </xacro:ray_sensor>
+    </xacro:if>
+
+    <xacro:if value="${gazebo == 'classic'}">
+      <sensor type="gpu_ray" name="{name}">
+        <pose>0 0 0.5 0 0 0</pose>
+        <visualize>true</visualize>
+        <update_rate>62.0</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>640</samples>
+              <resolution>1</resolution>
+              <min_angle>${-pi}</min_angle>
+              <max_angle>${pi}</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.164</min>
+            <max>12.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <!-- <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise> -->
+        </ray>
+        <plugin name="gazebo_ros_head_rplidar_controller" filename="libgazebo_ros_ray_sensor.so">
+          <topicName>scan</topicName>
+          <frameName>laser</frameName>
+          <output_type>sensor_msgs/LaserScan</output_type>
+        </plugin>
+      </sensor>
+    </xacro:if>
+
     <xacro:material_darkgray/>
   </gazebo>
 

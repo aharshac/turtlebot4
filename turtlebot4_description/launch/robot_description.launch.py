@@ -26,6 +26,9 @@ from launch_ros.actions import Node
 
 
 ARGUMENTS = [
+    DeclareLaunchArgument('gazebo', default_value='ignition',
+                          choices=['classic', 'ignition'],
+                          description='Which gazebo simulator to use'),
     DeclareLaunchArgument('model', default_value='standard',
                           choices=['standard', 'lite'],
                           description='Turtlebot4 Model'),
@@ -46,6 +49,7 @@ def generate_launch_description():
                                        LaunchConfiguration('model'),
                                        'turtlebot4.urdf.xacro'])
     namespace = LaunchConfiguration('namespace')
+    gazebo = LaunchConfiguration('gazebo')
 
     robot_state_publisher = Node(
         package='robot_state_publisher',
@@ -56,7 +60,7 @@ def generate_launch_description():
             {'use_sim_time': LaunchConfiguration('use_sim_time')},
             {'robot_description': Command([
                 'xacro', ' ', xacro_file, ' ',
-                'gazebo:=ignition', ' ',
+                'gazebo:=', gazebo, ' ',
                 'namespace:=', namespace])},
         ],
         remappings=[

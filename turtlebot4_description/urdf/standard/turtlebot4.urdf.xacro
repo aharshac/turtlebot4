@@ -120,7 +120,7 @@
     <origin xyz="${camera_mount_x_offset} ${camera_mount_y_offset} ${camera_mount_z_offset}"/>
   </xacro:camera_bracket>
 
-  <xacro:oakd model="pro" parent_link="oakd_camera_bracket">
+  <xacro:oakd model="pro" parent_link="oakd_camera_bracket" gazebo="$(arg gazebo)">
     <origin xyz="${oakd_pro_x_offset} ${oakd_pro_y_offset} ${oakd_pro_z_offset}"/>
   </xacro:oakd>
 
