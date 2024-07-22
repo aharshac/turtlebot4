@@ -9,6 +9,9 @@
   <xacro:include filename="$(find turtlebot4_description)/urdf/standard/tower_sensor_plate.urdf.xacro" />
   <xacro:include filename="$(find turtlebot4_description)/urdf/standard/weight_block.urdf.xacro" />
 
+  <!-- Gazebo version -->
+  <xacro:arg name="gazebo"                             default="ignition" />
+
   <!-- Mechanical properties -->
   <xacro:property name="shell_z_offset"                value="${3*cm2m}" />
   <xacro:property name="shell_radius"                  value="${12*cm2m}" />
@@ -120,8 +123,10 @@
     <origin xyz="${camera_mount_x_offset} ${camera_mount_y_offset} ${camera_mount_z_offset}"/>
   </xacro:camera_bracket>
 
-  <xacro:oakd model="pro" parent_link="oakd_camera_bracket">
-    <origin xyz="${oakd_pro_x_offset} ${oakd_pro_y_offset} ${oakd_pro_z_offset}"/>
-  </xacro:oakd>
+  <xacro:if value="${gazebo == 'ignition'}">
+    <xacro:oakd model="pro" parent_link="oakd_camera_bracket">
+      <origin xyz="${oakd_pro_x_offset} ${oakd_pro_y_offset} ${oakd_pro_z_offset}"/>
+    </xacro:oakd>
+  </xacro:if>
 
 </robot>

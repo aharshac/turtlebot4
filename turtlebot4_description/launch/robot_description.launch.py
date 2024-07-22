@@ -26,6 +26,9 @@ from launch_ros.actions import Node
 
 
 ARGUMENTS = [
+    DeclareLaunchArgument('gazebo', default_value='classic',
+                          choices=['classic', 'ignition'],
+                          description='Which gazebo simulator to use'),
     DeclareLaunchArgument('model', default_value='standard',
                           choices=['standard', 'lite'],
                           description='Turtlebot4 Model'),
@@ -41,6 +44,7 @@ ARGUMENTS = [
 
 def generate_launch_description():
     pkg_turtlebot4_description = get_package_share_directory('turtlebot4_description')
+    gazebo_simulator = LaunchConfiguration('gazebo')
     xacro_file = PathJoinSubstitution([pkg_turtlebot4_description,
                                        'urdf',
                                        LaunchConfiguration('model'),
@@ -56,7 +60,7 @@ def generate_launch_description():
             {'use_sim_time': LaunchConfiguration('use_sim_time')},
             {'robot_description': Command([
                 'xacro', ' ', xacro_file, ' ',
-                'gazebo:=ignition', ' ',
+                'gazebo:=', gazebo_simulator, ' ',
                 'namespace:=', namespace])},
         ],
         remappings=[
