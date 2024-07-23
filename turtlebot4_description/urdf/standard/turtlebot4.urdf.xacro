@@ -11,6 +11,7 @@
 
   <!-- Gazebo version -->
   <xacro:arg name="gazebo"                             default="ignition" />
+  <xacro:arg name="has_tower"                          default="false" />
 
   <!-- Mechanical properties -->
   <xacro:property name="shell_z_offset"                value="${3*cm2m}" />
@@ -92,25 +93,27 @@
   </xacro:weight_block>
 
   <!-- Turtlebot4 tower definition -->
-  <xacro:tower_standoff name="front_left_tower_standoff">
-    <origin xyz="${front_tower_standoff_x_offset} ${front_tower_standoff_y_offset} ${tower_standoff_z_offset}"/>
-  </xacro:tower_standoff>
+  <xacro:if value="$(arg has_tower)">
+    <xacro:tower_standoff name="front_left_tower_standoff">
+      <origin xyz="${front_tower_standoff_x_offset} ${front_tower_standoff_y_offset} ${tower_standoff_z_offset}"/>
+    </xacro:tower_standoff>
 
-  <xacro:tower_standoff name="front_right_tower_standoff">
-    <origin xyz="${front_tower_standoff_x_offset} ${-front_tower_standoff_y_offset} ${tower_standoff_z_offset}"/>
-  </xacro:tower_standoff>
+    <xacro:tower_standoff name="front_right_tower_standoff">
+      <origin xyz="${front_tower_standoff_x_offset} ${-front_tower_standoff_y_offset} ${tower_standoff_z_offset}"/>
+    </xacro:tower_standoff>
 
-  <xacro:tower_standoff name="rear_left_tower_standoff">
-    <origin xyz="${rear_tower_standoff_x_offset} ${rear_tower_standoff_y_offset} ${tower_standoff_z_offset}"/>
-  </xacro:tower_standoff>
+    <xacro:tower_standoff name="rear_left_tower_standoff">
+      <origin xyz="${rear_tower_standoff_x_offset} ${rear_tower_standoff_y_offset} ${tower_standoff_z_offset}"/>
+    </xacro:tower_standoff>
 
-  <xacro:tower_standoff name="rear_right_tower_standoff">
-    <origin xyz="${rear_tower_standoff_x_offset} ${-rear_tower_standoff_y_offset} ${tower_standoff_z_offset}"/>
-  </xacro:tower_standoff>
+    <xacro:tower_standoff name="rear_right_tower_standoff">
+      <origin xyz="${rear_tower_standoff_x_offset} ${-rear_tower_standoff_y_offset} ${tower_standoff_z_offset}"/>
+    </xacro:tower_standoff>
 
-  <xacro:tower_sensor_plate name="tower_sensor_plate">
-    <origin xyz="0 0 ${tower_sensor_plate_z_offset}"/>
-  </xacro:tower_sensor_plate>
+    <xacro:tower_sensor_plate name="tower_sensor_plate">
+      <origin xyz="0 0 ${tower_sensor_plate_z_offset}"/>
+    </xacro:tower_sensor_plate>
+  </xacro:if>
 
   <!-- Turtlebot4 sensor definitions -->
 
@@ -123,7 +126,7 @@
     <origin xyz="${camera_mount_x_offset} ${camera_mount_y_offset} ${camera_mount_z_offset}"/>
   </xacro:camera_bracket>
 
-  <xacro:if value="${gazebo == 'ignition'}">
+  <xacro:if value="${'$(arg gazebo)' == 'ignition'}">
     <xacro:oakd model="pro" parent_link="oakd_camera_bracket">
       <origin xyz="${oakd_pro_x_offset} ${oakd_pro_y_offset} ${oakd_pro_z_offset}"/>
     </xacro:oakd>
